@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
 
         float xAxis = Input.GetAxis("Horizontal");
         float yAxis = Input.GetAxis("Vertical");
-        float DAxis = Input.GetAxis("fire1");
+      //  float DAxis = Input.GetAxis("fire1");
 
         rigidbody.AddForce(new Vector3(xAxis, 0, yAxis) * m_Speed);
         //{
@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviour
             }
 
 
-    public void fire1()
+    public void Die()
     {
         Debug.Log("사망");
         gameObject.SetActive(false);
