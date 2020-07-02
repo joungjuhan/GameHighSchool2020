@@ -9,8 +9,8 @@ public class Bullet : MonoBehaviour
     {
         
     }
-public float m_Speed = 4f;
-    public float bulletDie = 5f;
+    public float m_Speed = 4f;
+    public float m_DestoryCooltime = 2f;
 // Update is called once per frame
 void Update()
     {
@@ -19,21 +19,20 @@ void Update()
        
     
     rigidbody.AddForce(transform.forward * m_Speed);
-        bulletDie -= Time.deltaTime;
+       m_DestoryCooltime -= Time.deltaTime;
 
-        if (bulletDie <= 0)
-            gameObject.SetActive(false);
+        if (m_DestoryCooltime <= 0)
+            Destroy(gameObject);
     }
     
     private void OnTriggerEnter(Collider other)
     {
-        if(other.attachedRigidbody != null & other.attachedRigidbody.tag == "Player")
+        if (other.attachedRigidbody != null && other.attachedRigidbody.tag == "Player")
         {
             var player = other.attachedRigidbody.GetComponent<PlayerController>();
             player.Die();
-           
         }
-    
+
     }
    
 }

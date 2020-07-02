@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
         
     }
 
-    public float m_Speed = 25f;
+    public float m_Speed = 14f;
     // Update is called once per frame
     void Update()
     {
