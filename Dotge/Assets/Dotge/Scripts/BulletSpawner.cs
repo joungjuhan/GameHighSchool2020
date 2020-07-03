@@ -33,7 +33,8 @@ public class BulletSpawner : MonoBehaviour
             GameObject bullet = GameObject.Instantiate(m_Bullet);
             bullet.transform.position = transform.position;
             bullet.transform.rotation = transform.rotation; //회전한 정도 
-
+            var b = bullet.GetComponent<Bullet>();
+            b.m_Velocity = transform.forward;
             //초기화
             m_spawncho = 0;
         }

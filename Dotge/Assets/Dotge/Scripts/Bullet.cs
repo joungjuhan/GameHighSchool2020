@@ -7,8 +7,9 @@ public class Bullet : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
     }
+    public Vector3 m_Velocity;
+
     public float m_Speed = 4f;
     public float m_DestoryCooltime = 2f;
 // Update is called once per frame
@@ -16,10 +17,9 @@ void Update()
     {
     Rigidbody rigidbody =GetComponent<Rigidbody>();
 
+       rigidbody.velocity = m_Velocity * m_Speed;
        
-    
-    rigidbody.AddForce(transform.forward * m_Speed);
-       m_DestoryCooltime -= Time.deltaTime;
+        m_DestoryCooltime -= Time.deltaTime;
 
         if (m_DestoryCooltime <= 0)
             Destroy(gameObject);
