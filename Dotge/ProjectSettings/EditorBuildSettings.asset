@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Dotge/Scenes/Level_Main.unity
+    guid: fc2595478611a5441ab9072b9ca90b53
   m_configObjects: {}

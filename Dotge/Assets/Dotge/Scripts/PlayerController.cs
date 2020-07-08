@@ -9,8 +9,11 @@ public class PlayerController : MonoBehaviour
     {
         
     }
-
+   
     public float m_Speed = 14f;
+    public GameManager m_GameManager;
+
+
     // Update is called once per frame
     void Update()
     {
@@ -52,6 +55,10 @@ public class PlayerController : MonoBehaviour
     public void Die()
     {
         Debug.Log("사망");
-        gameObject.SetActive(false);
+
+        m_GameManager.GameOver();
+
+        
+
     }
 }
