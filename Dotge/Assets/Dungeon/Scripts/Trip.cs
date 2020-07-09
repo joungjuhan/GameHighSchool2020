@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Trip : MonoBehaviour
 {
+    public UnityEvent m_OnEnter;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,7 +18,7 @@ public class Trip : MonoBehaviour
         {
             var player = other.attachedRigidbody.GetComponent<PlayerController_Dungeon>();
             if (player != null)
-                player.Die();
+                m_OnEnter.Invoke();
 
         }
         Debug.Log("들어감");

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Trip2 : MonoBehaviour
 {
@@ -10,21 +11,28 @@ public class Trip2 : MonoBehaviour
         
     }
 
+    public UnityEvent m_OnExit;
+
     private void OnCollisionEnter(Collision collision)
     {
         Debug.Log("들갔떄");
-        if (collision.rigidbody != null)
-        {
-            var player = collision.rigidbody.GetComponent<PlayerController_Dungeon>();
-            if (player != null)
-                player.Die();
-        }
+        //if (collision.rigidbody != null)
+        //{
+        //    var player = collision.rigidbody.GetComponent<PlayerController_Dungeon>();
+        //    if (player != null)
+        //        player.Die();
+        //}
     }
 
     private void OnCollisionExit(Collision collision)
     {
         Debug.Log("나올떄");
-
+        if (collision.rigidbody != null)
+        {
+            var player = collision.rigidbody.GetComponent<PlayerController_Dungeon>();
+            if (player != null)
+                m_OnExit.Invoke();
+        }
     }
 
     private void OnCollisionStay(Collision collision)

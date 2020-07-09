@@ -50,6 +50,7 @@ public class PlayerController_Dungeon : MonoBehaviour
     public void Die()
     {
         Debug.Log("사망");
-        m_playerController_Dungeon.gameObject.SetActive(false);
-    }
+        Destroy(gameObject);
+        GameManager_Dungeon gameManager = FindObjectOfType<GameManager_Dungeon>();
+        gameManager.ReturnToStartPoint();
 }
