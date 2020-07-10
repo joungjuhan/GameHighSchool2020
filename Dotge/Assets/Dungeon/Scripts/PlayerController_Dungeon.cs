@@ -12,7 +12,7 @@ public class PlayerController_Dungeon : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -23,7 +23,7 @@ public class PlayerController_Dungeon : MonoBehaviour
         float xAxis = Input.GetAxis("Horizontal");
         float zAxis = Input.GetAxis("Vertical");
 
-       // rigidbody.AddForce(new Vector3(xAxis, 0, zAxis) * m_Speed);
+        // rigidbody.AddForce(new Vector3(xAxis, 0, zAxis) * m_Speed);
 
         Vector3 velocity = new Vector3(xAxis, 0, zAxis) * m_Speed;
         //Rigidbody를 이요한 이동 처리
@@ -53,4 +53,5 @@ public class PlayerController_Dungeon : MonoBehaviour
         Destroy(gameObject);
         GameManager_Dungeon gameManager = FindObjectOfType<GameManager_Dungeon>();
         gameManager.ReturnToStartPoint();
+    }
 }
