@@ -6,7 +6,12 @@ public class PlayerController : MonoBehaviour
 {
     public Animator m_Animator;
     public Rigidbody2D m_Rigidbody2D;
-     
+    public AudioSource m_audioSource;
+
+
+    public AudioClip m_Jump;
+    public AudioClip m_Die;
+
     public bool m_IsGround = false;
     public bool m_IsDead = false;
 
@@ -36,6 +41,8 @@ public class PlayerController : MonoBehaviour
         //{
         //    m_Animator.SetBool("IsDead", true);
         //}
+        if (m_IsDead) return;
+
         m_Animator.SetBool("IsGround", m_IsGround);
 
         if (Input.GetKeyDown(KeyCode.Space) && m_JumpCount < 2)
@@ -43,7 +50,12 @@ public class PlayerController : MonoBehaviour
             m_Rigidbody2D.AddForce(Vector2.up * 400);
             m_Rigidbody2D.velocity = Vector2.zero;
             m_JumpCount++;
+
+            m_audioSource.clip = m_Jump;
+            m_audioSource.Play();
         }
+
+
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -53,6 +65,7 @@ public class PlayerController : MonoBehaviour
             m_JumpCount = 0;
             m_IsGround = true;
         }
+        
             
     }
     private void OnCollisionExit2D(Collision2D collision)
@@ -63,5 +76,18 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "DeadZone")
+        {
+            m_IsDead = true;
+            m_Animator.SetBool("IsDead", m_IsDead);
 
+            GameManager.Instance.OnPlayerDead();
+
+            m_audioSource.clip = m_Die;
+            m_audioSource.Play();
+        }
+    }
+    
 }
