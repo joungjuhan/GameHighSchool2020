@@ -40,7 +40,9 @@ public class EnemySmall : MonoBehaviour
         if (collision.tag == "PlayerBullet")
         {
             m_Animator.SetBool("Die", true);
+          GameManager.instance.AddScore();
             isDead = true;
+
         }
     }
     public void Die()

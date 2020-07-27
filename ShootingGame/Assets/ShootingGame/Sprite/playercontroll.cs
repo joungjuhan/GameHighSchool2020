@@ -40,7 +40,7 @@ public class playercontroll : MonoBehaviour
         }
 
 
-        if (Input.GetKey(KeyCode.R) && m_AttackCooldown <= 0)
+        if (Input.GetKey(KeyCode.Space) && m_AttackCooldown <= 0)
         {
             foreach (var FireMuzzle in m_FireMuzzle)
             {
@@ -50,5 +50,23 @@ public class playercontroll : MonoBehaviour
 
         }
         m_AttackCooldown -= Time.deltaTime;
+    }
+    public Animator m_Animator;
+    public bool isDead = false;
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "EnemyBullet")
+        {
+            m_Animator.SetBool("Die", true);
+            GameManager.instance.AddScore();
+            isDead = true;
+
+        }
+    }
+    public void Die()
+    {
+        GameManager.instance.OnplayerDie();
+        Destroy(gameObject);
     }
 }
