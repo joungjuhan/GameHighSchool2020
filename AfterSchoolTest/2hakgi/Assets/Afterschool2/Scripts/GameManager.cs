@@ -9,13 +9,15 @@ public class GameManager : MonoBehaviour
 
     // Start is called before the first frame update
     public static GameManager Instance;
-
+    public CubeSpawner1 m_cubeSpawner1;
     private void Awake()
     {
         if (Instance == null)
             Instance = this;
         else
             Destroy(gameObject);
+
+        m_cubeSpawner1.SpawnStart(); 
     }
 
     public void AddScore()
@@ -27,7 +29,7 @@ public class GameManager : MonoBehaviour
         m_Life--;
         if(m_Life <= 0)
         {
-
+            m_cubeSpawner1.gameObject.SetActive(false);
         }
     }
 }
