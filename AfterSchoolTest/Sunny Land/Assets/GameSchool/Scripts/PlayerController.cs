@@ -59,6 +59,8 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 m_Rigidbody2D.AddForce(Vector3.down * -yAxis);
+                Jumpbool = false;
+
             }
 
             //캐릭터 스프라이트 방향따라가기
@@ -119,8 +121,17 @@ public class PlayerController : MonoBehaviour
             m_IsTouchLadder = true;
 
         }
+        else if(collision.tag == "Item")
+        {
+            var item = collision.GetComponent<ItemComponet>(); 
+            
+            if(item != null)
+              item.BeAte();
+            
+        }
     }
 
+   
     private void OnTriggerExit2D(Collider2D collision)
     {
         if(collision.tag =="Ladder")
