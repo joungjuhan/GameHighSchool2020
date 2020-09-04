@@ -110,7 +110,22 @@ public class PlayerController : MonoBehaviour
         {
             Jumpbool = true;
         }
-     
+     foreach (ContactPoint2D contact in collision.contacts)
+        {
+            if(contact.normal.y > 0.5f)
+            {
+                m_JumpCount = 0;
+
+                if(contact.rigidbody)
+                {
+                    var hp = contact.rigidbody.GetComponent<HPComponet>();
+                    if(hp)
+                    {
+                        Destroy(hp.gameObject);
+                    }
+                }
+            }
+        }
 
     }
 
