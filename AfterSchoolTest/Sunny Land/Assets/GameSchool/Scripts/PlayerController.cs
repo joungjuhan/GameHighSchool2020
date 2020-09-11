@@ -19,6 +19,9 @@ public class PlayerController : MonoBehaviour
     public bool m_IsJumping = false;
     public bool m_m_Isclimbing = false;
     public bool m_IsTouchLadder = false;
+
+    public float m_HitRecoveringTime = 0;
+
     private Animator m_Animator;
     protected void Start()
     {
@@ -31,8 +34,21 @@ public class PlayerController : MonoBehaviour
         float xAxis = Input.GetAxis("Horizontal");
         float yAxis = Input.GetAxis("Vertical");
 
+        m_HitRecoveringTime -= Time.deltaTime;
 
-        if(m_IsTouchLadder == true && Mathf.Abs(yAxis) > 0.5f)
+
+        if(m_HitRecoveringTime > 0)
+        {
+            ClimbExit();
+            m_Animator.SetBool("TakingDamege", true);
+            return;
+        }
+        else
+        {
+            m_Animator.SetBool("TakingDamege", false);
+
+        }
+        if (m_IsTouchLadder == true && Mathf.Abs(yAxis) > 0.5f)
         {
             m_IsClimbing = true;
         }
@@ -112,17 +128,28 @@ public class PlayerController : MonoBehaviour
         }
      foreach (ContactPoint2D contact in collision.contacts)
         {
-            if(contact.normal.y > 0.5f)
+            if (contact.normal.y > 0.5f)
             {
                 m_JumpCount = 0;
 
-                if(contact.rigidbody)
+                if (contact.rigidbody)
                 {
                     var hp = contact.rigidbody.GetComponent<HPComponet>();
-                    if(hp)
+                    if (hp)
                     {
-                        Destroy(hp.gameObject);
+                       // Destroy(hp.gameObject);
+                        hp.TakeDamage(10);
                     }
+                }
+            }
+            else if (contact.rigidbody && contact.rigidbody.tag == "Enemy")
+            {
+                if (m_HitRecoveringTime <= 0)
+                {
+                    var hp = GetComponent<HPComponet>();
+                    hp.TakeDamage(10);
+                    m_HitRecoveringTime = 1f;
+                    //  m_Animator.SetTrigger("TakeDamege");
                 }
             }
         }
