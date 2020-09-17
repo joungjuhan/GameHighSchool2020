@@ -248,7 +248,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Sprite: {fileID: 0}
   m_XAxisSpeed: 5
-  m_YJumpPower: 470
+  m_YJumpPower: 450
   m_JumpCount: 0
   m_ClimbSpeed: 62.15
   Jumpbool: 0
@@ -257,6 +257,7 @@ MonoBehaviour:
   m_m_Isclimbing: 0
   m_IsTouchLadder: 0
   m_HitRecoveringTime: 0
+  m_Joystick: {fileID: 0}
 --- !u!95 &6095038016538325309
 Animator:
   serializedVersion: 3

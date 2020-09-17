@@ -22,20 +22,28 @@ public class PlayerController : MonoBehaviour
 
     public float m_HitRecoveringTime = 0;
 
+
+    private bool m_InputJump = false;
+
     private Animator m_Animator;
     protected void Start()
     {
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
         m_Animator = GetComponent<Animator>();
     }
-
+    public VariableJoystick m_Joystick;
     protected void Update()
     {
         float xAxis = Input.GetAxis("Horizontal");
         float yAxis = Input.GetAxis("Vertical");
 
+        xAxis += m_Joystick.Horizontal;
+        yAxis += m_Joystick.Vertical;
+
         m_HitRecoveringTime -= Time.deltaTime;
 
+        var intputJump = m_InputJump;
+        m_InputJump = false;
 
         if(m_HitRecoveringTime > 0)
         {
@@ -53,7 +61,7 @@ public class PlayerController : MonoBehaviour
             m_IsClimbing = true;
         }
 
-        if(!m_IsClimbing)
+        if (!m_IsClimbing)
         {
             Vector2 velocity = m_Rigidbody2D.velocity;
             velocity.x = xAxis * m_XAxisSpeed;
@@ -61,10 +69,10 @@ public class PlayerController : MonoBehaviour
             //ㅈㅍ
             if (Jumpbool)
             {
-                if (Input.GetKeyDown(KeyCode.Space))
+                if ((Input.GetKeyDown(KeyCode.Space) || intputJump) && m_JumpCount <= 0)
                 {
                     m_Rigidbody2D.AddForce(Vector3.up * m_YJumpPower);
-
+                    m_JumpCount++;
                 }
             }
             if (Input.GetKeyDown(KeyCode.S))
@@ -72,12 +80,7 @@ public class PlayerController : MonoBehaviour
                 m_Rigidbody2D.AddForce(Vector3.down * m_YJumpPower);
 
             }
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                m_Rigidbody2D.AddForce(Vector3.down * -yAxis);
-                Jumpbool = false;
-
-            }
+          
 
             //캐릭터 스프라이트 방향따라가기
             if (xAxis > 0)
@@ -104,7 +107,7 @@ public class PlayerController : MonoBehaviour
                 movement.y = yAxis * Time.deltaTime;
             transform.position += movement;
 
-            if(Input.GetKeyDown(KeyCode.Space))
+            if(Input.GetKeyDown(KeyCode.Space) || intputJump)
             {
                 ClimbExit();
             }
@@ -183,5 +186,8 @@ public class PlayerController : MonoBehaviour
             ClimbExit();
         }
     }
-
+    public void Jump()
+    {
+        m_InputJump = true;
+    }
 }
