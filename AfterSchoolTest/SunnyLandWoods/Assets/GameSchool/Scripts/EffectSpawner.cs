@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EffectSpawner : MonoBehaviour
+namespace Jeongjuhan
 {
-    public GameObject m_SpawnObject;
 
-    public void Spawn()
+    public class EffectSpawner : MonoBehaviour
     {
-        GameObject.Instantiate(m_SpawnObject, transform.position, transform.rotation);
+        public GameObject m_SpawnObject;
+
+        public void Spawn()
+        {
+            GameObject.Instantiate(m_SpawnObject, transform.position, transform.rotation);
+        }
     }
 }

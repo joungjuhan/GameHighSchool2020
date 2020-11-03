@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SelfDestructibleObject : MonoBehaviour
+namespace Jeongjuhan
 {
-    public void selfDestroy()
+    public class SelfDestructibleObject : MonoBehaviour
+
     {
-        Destroy(gameObject);
+        public void selfDestroy()
+        {
+            Destroy(gameObject);
+        }
     }
 }

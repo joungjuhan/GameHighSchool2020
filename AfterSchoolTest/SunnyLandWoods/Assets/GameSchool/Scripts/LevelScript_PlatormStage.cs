@@ -3,19 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LevelScript_PlatormStage : MonoBehaviour
+namespace Jeongjuhan
 {
-  public void RestartLevel()
+    public class LevelScript_PlatormStage : MonoBehaviour
     {
-        var nowScene = SceneManager.GetActiveScene();
-        SceneManager.LoadScene(nowScene.name);
+        public void RestartLevel()
+        {
+            var nowScene = SceneManager.GetActiveScene();
+            SceneManager.LoadScene(nowScene.name);
+
+        }
+
+
+        public void LoadLevel(string levelName)
+        {
+            SceneManager.LoadScene(levelName);
+        }
 
     }
-
-
-    public void LoadLevel(string levelName)
-    {
-        SceneManager.LoadScene(levelName);
-    }
-
 }
