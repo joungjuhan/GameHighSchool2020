@@ -18,6 +18,7 @@ public class Gun : MonoBehaviour {
     public ParticleSystem muzzleFlashEffect; // 총구 화염 효과
     public ParticleSystem shellEjectEffect; // 탄피 배출 효과
 
+
     private LineRenderer bulletLineRenderer; // 총알 궤적을 그리기 위한 렌더러
 
     private AudioSource gunAudioPlayer; // 총 소리 재생기
@@ -45,16 +46,25 @@ public class Gun : MonoBehaviour {
 
     private void OnEnable() {
         // 총 상태 초기화
+        //총을 가득채움
+        magAmmo = magCapacity;
     }
 
     // 발사 시도
     public void Fire() {
         //마지막으로 총을 쏜시간 + 공격 딜레이보디 현재시간이 더오래 되었으면 
-        if(lastFireTime + timeBetFire<= Time.time)
+        if (lastFireTime + timeBetFire <= Time.time)
         {
-            Shot();
-            //마지막으로 총을 쏜시간은 현재.
-            lastFireTime = Time.time;
+            if (magAmmo > 0)
+            {
+                Shot();
+
+                //총알을 쏠때마다 탄창의 총알은 1씩 소모.
+                magAmmo -= 1;
+
+                //마지막으로 총을 쏜시간은 현재.
+                lastFireTime = Time.time;
+            }
         }
     }
 
@@ -64,9 +74,20 @@ public class Gun : MonoBehaviour {
      bool isHit = Physics.Raycast(fireTransform.position, fireTransform.forward,out hitInfo, fireDistance);
 
         Vector3 hitPosition;
-        if(isHit)
+        if (isHit)
         {
             hitPosition = hitInfo.point;
+            IDamageable[] damageables;
+           if(hitInfo.rigidbody != null)
+                damageables = hitInfo.rigidbody.GetComponents<IDamageable>();
+           else
+                damageables = hitInfo.collider.GetComponents<IDamageable>();
+
+
+            foreach (var damageable in damageables)
+
+            {
+                damageable.OnDamage(damage, hitPosition, hitInfo.normal);            }
         }
         else
         {
@@ -109,9 +130,40 @@ public class Gun : MonoBehaviour {
         bulletLineRenderer.enabled = false;
     }
 
+  
+
     // 재장전 시도
+
     public bool Reload() {
-        return false;
+        if(magAmmo >= magCapacity)
+        {
+            return false;
+        }
+        else if (ammoRemain <0)
+        {
+            return false;
+
+        }
+        else 
+        {
+            //남아있는 총알수(ammoRemain) , 탄창에 넣어야할 총알수 (탄창 크기 - 현재 탄창의 총알수 
+            int requireAmmo = magCapacity - magAmmo;
+            if(ammoRemain >= requireAmmo)
+            {
+                //탄창을 채우고
+                magAmmo = magCapacity;
+                ammoRemain -= requireAmmo;
+            }
+            else
+            {
+                //탄창에는 남ㅇ아있는 총알 수 만큼 탄창을 채운다
+                magAmmo = ammoRemain;
+                ammoRemain = 0;
+            }
+            return true;
+        }
+
+       
     }
 
     // 실제 재장전 처리를 진행
