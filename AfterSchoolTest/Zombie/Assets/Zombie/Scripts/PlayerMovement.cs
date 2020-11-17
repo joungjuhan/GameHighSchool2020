@@ -11,10 +11,10 @@ public class PlayerMovement : MonoBehaviour {
     private Animator playerAnimator; // 플레이어 캐릭터의 애니메이터
 
     private void Start() {
+        // 사용할 컴포넌트들의 참조를 가져오기
         playerInput = GetComponent<PlayerInput>();
         playerRigidbody = GetComponent<Rigidbody>();
         playerAnimator = GetComponent<Animator>();
-        // 사용할 컴포넌트들의 참조를 가져오기
     }
 
     // FixedUpdate는 물리 갱신 주기에 맞춰 실행됨
@@ -22,24 +22,47 @@ public class PlayerMovement : MonoBehaviour {
         // 물리 갱신 주기마다 움직임, 회전, 애니메이션 처리 실행
 
         Move();
+
         Rotate();
 
-        playerAnimator.SetFloat("Move", playerInput.move);
-
+        playerAnimator.SetFloat("Move", playerInput.move, playerInput.rotate);
     }
 
     // 입력값에 따라 캐릭터를 앞뒤로 움직임
     private void Move() {
-        //암뒤 움직임
-        transform.position += transform.forward * Time.fixedDeltaTime * playerInput.move;
+        var forward = Camera.main.transform.forward;
+        forward.y = 0;
+        forward.Normalize();
+        var right = Camera.main.transform.right;
+        right.y = 0;
+        right.Normalize();
 
+
+        //앞뒤 움직임
+        transform.position
+            += forward 
+               * moveSpeed * Time.fixedDeltaTime
+               * playerInput.move;
+        //좌우움직임
+        transform.position
+            += Vector3.right
+               * moveSpeed * Time.fixedDeltaTime
+               * playerInput.rotate;
+        return;
     }
 
     // 입력값에 따라 캐릭터를 좌우로 회전
-    private void Rotate() {
+    private void Rotate()
+    {
+        //좌 회전
+        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Plane plane = new Plane(Vector3.up, 0);
+        float enter;
+        plane.Raycast(ray, out enter);
+        var point = ray.GetPoint(enter);
+        transform.LookAt(point);
+        return;
 
-        //좌우 회전
         transform.Rotate(0, rotateSpeed * Time.fixedDeltaTime * playerInput.rotate, 0);
-
     }
 }

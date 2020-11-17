@@ -2,8 +2,7 @@
 using UnityEngine.UI; // UI 관련 코드
 
 // 플레이어 캐릭터의 생명체로서의 동작을 담당
-public class PlayerHealth : LivingEntity
-{
+public class PlayerHealth : LivingEntity {
     public Image healthSlider; // 체력을 표시할 UI 슬라이더
     //public Slider healthSlider; // 체력을 표시할 UI 슬라이더
 
@@ -18,27 +17,35 @@ public class PlayerHealth : LivingEntity
     private PlayerShooter playerShooter; // 플레이어 슈터 컴포넌트
 
     public GameObject bloodEffect;
-    private void Awake()
-    {
+
+    private void Awake() {
         // 사용할 컴포넌트를 가져오기
+        playerAudioPlayer = GetComponent<AudioSource>();
+        playerAnimator = GetComponent<Animator>();
+        playerMovement = GetComponent<PlayerMovement>();
+        playerShooter = GetComponent<PlayerShooter>();
     }
 
-    protected override void OnEnable()
-    {
+    protected override void OnEnable() {
         // LivingEntity의 OnEnable() 실행 (상태 초기화)
         base.OnEnable();
+
+        RefreshHP();
+
+        playerMovement.enabled = true;
+        playerShooter.enabled = true;
     }
 
     // 체력 회복
-    public override void RestoreHealth(float newHealth)
-    {
+    public override void RestoreHealth(float newHealth) {
         // LivingEntity의 RestoreHealth() 실행 (체력 증가)
         base.RestoreHealth(newHealth);
+
+        RefreshHP();
     }
 
     // 데미지 처리
-    public override void OnDamage(float damage, Vector3 hitPoint, Vector3 hitDirection)
-    {
+    public override void OnDamage(float damage, Vector3 hitPoint, Vector3 hitDirection) {
         // LivingEntity의 OnDamage() 실행(데미지 적용)
         base.OnDamage(damage, hitPoint, hitDirection);
 
@@ -46,31 +53,44 @@ public class PlayerHealth : LivingEntity
         effect.transform.position = hitPoint;
         effect.transform.forward = hitDirection;
         effect.GetComponent<ParticleSystem>().Play();
-       
+
+        RefreshHP();
+
+        if(!dead)
+        {
+            playerAudioPlayer.clip = hitClip;
+            playerAudioPlayer.Play();
+        }
     }
 
     // 사망 처리
-    public override void Die()
-    {
+    public override void Die() {
         // LivingEntity의 Die() 실행(사망 적용)
         base.Die();
+        playerAudioPlayer.clip = deathClip;
+        playerAudioPlayer.Play();
+        playerAnimator.SetTrigger("Die");
+
+        playerMovement.enabled = false;
+        playerShooter.enabled = false;
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
+    private void OnTriggerEnter(Collider other) {
         // 아이템과 충돌한 경우 해당 아이템을 사용하는 처리
     }
 
-
     private void RefreshHP()
     {
-        healthSlider.fillAmount = health / startingHealth;
+        healthSlider.fillAmount 
+            = health / startingHealth;
     }
 
-    [ContextMenu("TestHIt")]
-    public void TestHit()
 
+    [ContextMenu("TestHit")]
+    public void TestHit()
     {
-        OnDamage(10, transform.position + Vector3.up, transform.forward);
+        OnDamage(10, 
+            transform.position + Vector3.up, 
+            transform.forward);
     }
 }
